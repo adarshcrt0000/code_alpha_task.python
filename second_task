@@ -1,0 +1,56 @@
+
+prices = {
+    "AAPL": 180,
+    "TSLA": 250,
+    "GOOG": 140,
+    "MSFT": 330,
+    "AMZN": 125
+}
+
+portfolio = {}
+total = 0
+
+print("=== STOCK PORTFOLIO TRACKER ===")
+print("Available stocks:", ", ".join(prices.keys()))
+print("Type 'done' when finished.\n")
+
+while True:
+    name = input("Enter stock name: ").upper()
+
+    if name == "DONE":
+        break
+
+    if name not in prices:
+        print("Stock not found. Try again.\n")
+        continue
+
+    try:
+        qty = int(input("Enter quantity: "))
+        if qty <= 0:
+            print("Quantity must be positive.\n")
+            continue
+    except ValueError:
+        print("Please enter a valid number.\n")
+        continue
+
+    portfolio[name] = portfolio.get(name, 0) + qty
+    print(f"Added {qty} shares of {name}.\n")
+
+print("\n--- Portfolio Summary ---")
+for stock, qty in portfolio.items():
+    value = prices[stock] * qty
+    total += value
+    print(f"{stock}: {qty} x ${prices[stock]} = ${value}")
+
+print(f"\nTotal Investment Value: ${total}")
+
+# Optionally save result to a file
+save = input("\nSave result to file? (y/n): ").lower()
+if save == "y":
+    with open("portfolio.txt", "w") as f:
+        f.write("Stock Portfolio Summary\n")
+        f.write("-----------------------\n")
+        for stock, qty in portfolio.items():
+            f.write(f"{stock}: {qty} x ${prices[stock]} = ${prices[stock] * qty}\n")
+        f.write(f"\nTotal Investment Value: ${total}\n")
+    print("Saved to portfolio.txt")
